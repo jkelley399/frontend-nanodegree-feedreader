@@ -25,6 +25,27 @@ var allFeeds = [
 	}
 ];
 
+// TODO-JK: Move the following constants and variables, which are used to
+// track states for testing, into an object
+// The body element of index.html
+// Based on https://developer.mozilla.org/en-US/docs/Web/API/Document/body
+// and https://developer.mozilla.org/en-US/docs/Web/API/Element/classList
+// consulted 2019-06-22
+// This constant is used in the 'is hidden by default' test
+const bodyElementClassList = document.body.classList;
+
+// Tracks the toggle state of the body element
+// This variable is used in the 'changes visibly when menu icon clicked' test
+let bodyElementIsHidden = true;
+
+// Tracks whether loadFeed(id, cb) has run successfully
+// This variable is used in the 'Initial Entries' test suite
+let loadFeedHasRun = false;
+
+function lfHasRun() {
+	loadFeedHasRun = true;
+}
+
 /* This function starts up our application. The Google Feed
  * Reader API is loaded asynchonously and will then call this
  * function when the API is loaded.
@@ -130,6 +151,17 @@ $(function() {
 	 * on the body to perform the hiding/showing of our menu.
 	 */
 	menuIcon.on('click', function() {
+	/* Adding if...else to toggle state of bodyElementIsHidden for
+	 * the 'changes visibly when menu icon clicked' test.
+	 * The console log statements were added for testing of that test.
+	 */
+		if (bodyElementIsHidden) {
+			bodyElementIsHidden = false;
+            // console.log('menu is not hidden');
+		} else {
+			bodyElementIsHidden = true;
+            // console.log('menu is hidden');
+		}
 		$('body').toggleClass('menu-hidden');
 	});
 }());

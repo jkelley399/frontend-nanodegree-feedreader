@@ -58,24 +58,22 @@ $(function() {
     /* TODO: Write a new test suite named "The menu" */
     /* Second test suite, which is about the behavior of the menu.*/
     describe('The menu', function() {
-        /* TODO: Write a test that ensures the menu element is
+        /* TODO-JK: Write a test that ensures the menu element is
          * hidden by default. You'll have to analyze the HTML and
          * the CSS to determine how we're performing the
          * hiding/showing of the menu element.
          */
-     // NOTE 2019-06-21: This behavior seems to be controlled by index.html
-    // <body class="menu-hidden">
-    //     <div class="header">
-    //         <a href="#" class="menu-icon-link">
-    //             <i class="icon-list"></i>
-    //         </a>
 
-    //         <h1 class="header-title">Feeds</h1>
-    //     </div>
-
+        // This behavior is controlled by index.html in the body element.
+        // A constant has been added to app.js, bodyElementClassList,
+        // to save document.body.classList at load.  This test checks
+        // to see whether that classList contains 'menu-hidden'
+        // which is the class in style.css that moves the body element
+        // outside the viewport and hides it.
+        // Use of toContain based on: https://devhints.io/jasmine
+        // consulted 2019-06-22
         it('is hidden by default', function() {
-            expect(allFeeds).toBeDefined();
-            expect(allFeeds.length).not.toBe(0);
+            expect(bodyElementClassList).toContain('menu-hidden');
         });
 
         /* TODO: Write a test that ensures the menu changes
@@ -83,29 +81,77 @@ $(function() {
           * should have two expectations: does the menu display when
           * clicked and does it hide when clicked again.
           */
-     // NOTE 2019-06-21: This behavior seems to be controlled by app.js:
 
-    /* When the menu icon is clicked on, we need to toggle a class
-     * on the body to perform the hiding/showing of our menu.
-     */
-     //    menuIcon.on('click', function() {
-     //        $('body').toggleClass('menu-hidden');
-     //    });
+        // This behavior is controlled by app.js in menuIcon.on.
+        // A variable has been added to app.js, bodyElementIsHidden,
+        // to capture the state of the toggling of the 'menu-hidden' class.
+        // Use of toContain based on: https://devhints.io/jasmine
+        // consulted 2019-06-22
+        // TODO-JK: Another, and more interesting, approach to this test might be to use
+        // the [jasmine-jquery extension](https://github.com/velesin/jasmine-jquery),
+        // which seems to be available [using npm](https://www.npmjs.com/package/jasmine-jquery),\
+        // and [through a cdn](https://www.jsdelivr.com/package/npm/jasmine-jquery).
+        // In particular, the [Jasmine cheatsheet](https://devhints.io/jasmine)
+        // has a section, "Event spies," that suggests how one might instead spy
+        // on the click events to which menuIcon.on in app.js responds.
+
 
         it('changes visibly when menu icon clicked', function() {
-            expect(allFeeds).toBeDefined();
-            expect(allFeeds.length).not.toBe(0);
+            if (bodyElementIsHidden) {
+                expect(bodyElementClassList).toContain('menu-hidden');
+            } else {
+                expect(bodyElementClassList).not.toContain('menu-hidden');
+            }
         });
     });
     /* TODO: Write a new test suite named "Initial Entries" */
+    /* Third test suite, which is about the behavior of loadFeed(id, cb).*/
 
+
+// TODO-JK 2019-06-22: Not currently working.  Pick up next time after reading
+// https://jasmine.github.io/tutorials/async
+
+    describe('Initial Entries', function() {
     /* TODO: Write a test that ensures when the loadFeed
          * function is called and completes its work, there is at least
          * a single .entry element within the .feed container.
          * Remember, loadFeed() is asynchronous so this test will require
          * the use of Jasmine's beforeEach and asynchronous done() function.
          */
+        // Based on prior UDAC material, specifically AddressBookSpec.js, and
+        // https://developer.mozilla.org/en-US/docs/Web/API/Document/
+        // querySelector
+        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/
+        // Global_Objects/Array/includes
+        // Consulted 2019-06-22
+        const feedDiv = document.querySelector('.feed');
+        const feedDivChildrenList = feedDiv.childNodes;
+        let feedDivChildrenEntryElementsList = [];
+        for (let element of feedDivChildrenEntryElementsList) {
+            if (element.classList.includes('entry')) {
+                feedDivChildrenEntryElementsList.push('true');
+            }
+        }
 
+         beforeEach(function(done){
+            lfHasRun();
+            done();
+         });
+         // Based upon prior test, above,
+         // 'and all their URLs are defined and non-empty'
+         // Also based upon
+         // https://developer.mozilla.org/en-US/docs/Web/API/Node/childNodes
+         // consulted 2019-06-22
+        /* the for...loop in each of the following two tests is based upon
+         * https://developer.mozilla.org/en-US/docs/Web/JavaScript
+         * /Reference/Statements/for...of
+         * consulted 2019-06-21
+         */
+        it('at least one .entry element in .feed container.', function() {
+            expect(feedDivChildrenEntryElementsList.length).not.toBe(0);
+        });
+
+    });
     /* TODO: Write a new test suite named "New Feed Selection" */
 
     /* TODO: Write a test that ensures when a new feed is loaded
@@ -117,5 +163,18 @@ $(function() {
 
 // Materials relied upon in addition to Udacity course material
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of
-
 // consulted 2019-06-21
+// https://developer.mozilla.org/en-US/docs/Web/API/Document/body
+// https://developer.mozilla.org/en-US/docs/Web/API/Element/classList
+// https://devhints.io/jasmine
+// https://github.com/velesin/jasmine-jquery
+// https://www.npmjs.com/package/jasmine-jquery
+// https://www.jsdelivr.com/package/npm/jasmine-jquery
+// https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector
+// https://developer.mozilla.org/en-US/docs/Web/API/Node/childNodes
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/includes
+// https://jasmine.github.io/tutorials/async
+// consulted 2019-06-22
+
+// Based on:
+// consulted 2019-06-22

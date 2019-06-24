@@ -8,6 +8,9 @@
  * since some of these tests may require DOM elements. We want
  * to ensure they don't run until the DOM is ready.
  */
+
+// import { loadFeed } from '../../js/app.js'
+
 $(function() {
     /* This is our first test suite - a test suite just contains
     * a related set of tests. This suite is all about the RSS
@@ -108,8 +111,11 @@ $(function() {
     /* Third test suite, which is about the behavior of loadFeed(id, cb).*/
 
 
-// TODO-JK 2019-06-22: Not currently working.  Pick up next time after reading
-// https://jasmine.github.io/tutorials/async
+// TODO-JK 2019-06-23: Not currently working.
+// Write to mentor.
+// Pick up next time after:
+    // (a) reading other suggested materials; and
+    // (b) seeing if problem is from using conda env.
 
     describe('Initial Entries', function() {
     /* TODO: Write a test that ensures when the loadFeed
@@ -118,39 +124,51 @@ $(function() {
          * Remember, loadFeed() is asynchronous so this test will require
          * the use of Jasmine's beforeEach and asynchronous done() function.
          */
-        // Based on prior UDAC material, specifically AddressBookSpec.js, and
+
+        // Based upon prior test, above,
+        // Also based on prior UDAC material, specifically AddressBookSpec.js, and
         // https://developer.mozilla.org/en-US/docs/Web/API/Document/
         // querySelector
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/
         // Global_Objects/Array/includes
         // Consulted 2019-06-22
-        const feedDiv = document.querySelector('.feed');
-        const feedDivChildrenList = feedDiv.childNodes;
-        let feedDivChildrenEntryElementsList = [];
-        for (let element of feedDivChildrenEntryElementsList) {
-            if (element.classList.includes('entry')) {
-                feedDivChildrenEntryElementsList.push('true');
-            }
-        }
+        // TODO: Also based upon
+        // https://jasmine.github.io/tutorials/async
+        // Consulted 2019-06-23
 
-         beforeEach(function(done){
-            lfHasRun();
+        // beforeEach(async function(){
+        //     await loadFeed(0,loadFeedCB);
+        //  });
+
+        let entryDivGrandParentClassList;
+
+        beforeEach(function(done){
+
+            // loadFeed(0);
+            // NOTE-JK-2019-06-23: Should not be called until
+            // entryDiv exists after loadFeed has run
+            init();
             done();
          });
-         // Based upon prior test, above,
-         // 'and all their URLs are defined and non-empty'
-         // Also based upon
-         // https://developer.mozilla.org/en-US/docs/Web/API/Node/childNodes
-         // consulted 2019-06-22
-        /* the for...loop in each of the following two tests is based upon
-         * https://developer.mozilla.org/en-US/docs/Web/JavaScript
-         * /Reference/Statements/for...of
-         * consulted 2019-06-21
-         */
-        it('at least one .entry element in .feed container.', function() {
-            expect(feedDivChildrenEntryElementsList.length).not.toBe(0);
-        });
 
+        // it('at least one .entry element in .feed container.', async function() {
+        it('at least one .entry element in .feed container.', function(done) {
+        // NOTE-JK-2019-06-24: Trying new approach,
+           // after all variations of https://jasmine.github.io/tutorials/async
+           // and several attempts to pass in entryDivGPCL() and other
+           // functions from app.js have failed.
+           // Now, two parameters passed into beforeEach, above, including done,
+           // and only after that do we try to define entryDivGrandParentClassList
+           // If this fails, could also try defining entryDivGrandParentClassList
+           // in app.js, but I think I tried that before without success
+           // (new variation might be to put both the function and the
+           //  result in an object)
+        //     const result = await loadFeedCB();
+        //     expect(loadFeedHasRun).toBe(true);
+            entryDivGrandParentClassList = entryDiv.parentElement.parentElement.classList;
+            expect(entryDivGrandParentClassList).toContain('feed');
+            done();
+        });
     });
     /* TODO: Write a new test suite named "New Feed Selection" */
 
@@ -178,3 +196,28 @@ $(function() {
 
 // Based on:
 // consulted 2019-06-22
+
+// https://jasmine.github.io/tutorials/async
+// https://www.techiediaries.com/jasmine-testing-tutorial/
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export
+// https://stackoverflow.com/questions/41722621/es6-in-the-browser-uncaught-syntaxerror-unexpected-token-import/45745913
+
+// consulted 2019-06-23
+
+// *************
+// const feedDiv = document.querySelector('.feed');
+// let a = feedDiv.childNodes;
+// let aArray = Array.from(a);
+// aArray[1].childNodes[1].classList[0] == 'entry';
+
+// const feedDiv = document.querySelector('.feed');
+// let a = feedDiv.childNodes;
+// a[0].classList; //undefined
+// a[1].classList; // DOMTokenList ["entry-link", value: "entry-link"]
+// c = a[1].classList;
+// c.contains('entry-link'); //true
+
+// const entryDiv = document.querySelector('.entry');
+// entryDiv.classList.contains('feed');
+// entryDiv.parentElement.parentElement.classList.contains('feed');
+

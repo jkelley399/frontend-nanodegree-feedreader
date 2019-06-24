@@ -31,23 +31,30 @@ var allFeeds = [{
 const bodyElementClassList = document.body.classList; // Tracks the toggle state of the body element
 // This variable is used in the 'changes visibly when menu icon clicked' test
 
-let bodyElementIsHidden = true; // Tracks whether loadFeed(id, cb) has run successfully
+let bodyElementIsHidden = true; // NOTE-JK-2019-06-23: Trying different approach...
+// Tracks whether loadFeed(id, cb) has run successfully
 // This variable is used in the 'Initial Entries' test suite
+// let loadFeedHasRun = false;
+// const loadFeedCB = function lfHasRun() {
+// 	loadFeedHasRun = true;
+// }
 
-let loadFeedHasRun = false;
-
-function lfHasRun() {
-  loadFeedHasRun = true;
-}
 /* This function starts up our application. The Google Feed
  * Reader API is loaded asynchonously and will then call this
  * function when the API is loaded.
  */
 
+let entryDiv; // NOTE-JK-2019-06-23: Callback for loadFeed
+
+function entryDivGPCL() {
+  entryDiv = document.querySelector('.entry');
+}
 
 function init() {
   // Load the first feed we've defined (index of 0).
-  loadFeed(0);
+  // NOTE-JK-2019-06-23: Trying passing in entryDivGPCL
+  // loadFeed(0,loadFeedCB);
+  loadFeed(0, entryDivGPCL);
 }
 /* This function performs everything necessary to load a
  * feed using the Google Feed Reader API. It will then
@@ -159,4 +166,7 @@ $(function () {
 
     $('body').toggleClass('menu-hidden');
   });
-}());
+}()); // exporting for tests
+// based on https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export
+// consulted 2019-06-23
+// export { loadFeed };

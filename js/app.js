@@ -52,18 +52,8 @@ let bodyElementIsHidden = true;
  * function when the API is loaded.
  */
 
-let entryDiv;
-
-// NOTE-JK-2019-06-23: Callback for loadFeed
-function entryDivGPCL() {
-    entryDiv = document.querySelector('.entry');
-}
-
 function init() {
-	// Load the first feed we've defined (index of 0).
-	// NOTE-JK-2019-06-23: Trying passing in entryDivGPCL
-	// loadFeed(0,loadFeedCB);
-	loadFeed(0,entryDivGPCL);
+	loadFeed(0);
 }
 
 /* This function performs everything necessary to load a

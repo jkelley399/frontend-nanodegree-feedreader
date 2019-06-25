@@ -111,11 +111,7 @@ $(function() {
     /* Third test suite, which is about the behavior of loadFeed(id, cb).*/
 
 
-// TODO-JK 2019-06-23: Not currently working.
-// Write to mentor.
-// Pick up next time after:
-    // (a) reading other suggested materials; and
-    // (b) seeing if problem is from using conda env.
+// TODO-JK 2019-06-24: Not currently working.
 
     describe('Initial Entries', function() {
     /* TODO: Write a test that ensures when the loadFeed
@@ -136,38 +132,32 @@ $(function() {
         // https://jasmine.github.io/tutorials/async
         // Consulted 2019-06-23
 
-        // beforeEach(async function(){
-        //     await loadFeed(0,loadFeedCB);
-        //  });
-
-        let entryDivGrandParentClassList;
-
+        // NOTE-JK-2019-06-24: This beforeEach() method is further based upon
+        // a specific suggestion from Udacity mentor Peter J.  After I had
+        // exhausted my ideas for modifying beforeEach, I wrote to Peter J., he very
+        // quickly and helpfully suggested passing two arguments to loadFeed, including
+        // done, and he specifically suggested the statement for loadFeed that I have
+        // used below, "loadFeed(0, done)" (see his direct message to me on 2019-06-24
+        // at 1:34 PM PDT)
         beforeEach(function(done){
 
-            // loadFeed(0);
-            // NOTE-JK-2019-06-23: Should not be called until
-            // entryDiv exists after loadFeed has run
-            init();
+            loadFeed(0, done);
             done();
          });
 
-        // it('at least one .entry element in .feed container.', async function() {
         it('at least one .entry element in .feed container.', function(done) {
-        // NOTE-JK-2019-06-24: Trying new approach,
-           // after all variations of https://jasmine.github.io/tutorials/async
-           // and several attempts to pass in entryDivGPCL() and other
-           // functions from app.js have failed.
-           // Now, two parameters passed into beforeEach, above, including done,
-           // and only after that do we try to define entryDivGrandParentClassList
-           // If this fails, could also try defining entryDivGrandParentClassList
-           // in app.js, but I think I tried that before without success
-           // (new variation might be to put both the function and the
-           //  result in an object)
-        //     const result = await loadFeedCB();
-        //     expect(loadFeedHasRun).toBe(true);
-            entryDivGrandParentClassList = entryDiv.parentElement.parentElement.classList;
-            expect(entryDivGrandParentClassList).toContain('feed');
+        // NOTE-JK-2019-06-24: After direct message from Trying new approach based on
+        // https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector
+        // https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector
+            const feedDiv = document.querySelector('.feed');
+            const entryElement = (document.querySelector('.feed')).querySelector('.entry');
+            console.log(feedDiv);
+            console.log(entryElement);
+            expect(entryElement).toBeDefined();
+            expect(entryElement.length).not.toBe(0);
             done();
+            // Brute force route foward:
+            // feedDiv.childNodes[1].childNodes[1].classList.value;
         });
     });
     /* TODO: Write a new test suite named "New Feed Selection" */

@@ -132,32 +132,71 @@ $(function() {
         // https://jasmine.github.io/tutorials/async
         // Consulted 2019-06-23
 
-        // NOTE-JK-2019-06-24: This beforeEach() method is further based upon
-        // a specific suggestion from Udacity mentor Peter J.  After I had
-        // exhausted my ideas for modifying beforeEach, I wrote to Peter J., he very
-        // quickly and helpfully suggested passing two arguments to loadFeed, including
-        // done, and he specifically suggested the statement for loadFeed that I have
-        // used below, "loadFeed(0, done)" (see his direct message to me on 2019-06-24
-        // at 1:34 PM PDT)
+        // NOTE-JK-2019-06-25: This beforeEach() method is further based upon
+        // two specific suggestions from Udacity mentor Peter J.  First, on 2019-06-24,
+        // after I had exhausted my ideas for modifying beforeEach, I wrote to Peter J.,
+        // he very quickly and helpfully suggested passing two arguments to loadFeed,
+        // including done, and he specifically suggested the statement for loadFeed that
+        // I have used below, "loadFeed(0, done)" (see his direct message to me on
+        // 2019-06-24 at 1:34 PM PDT).  Second, again on 2019-06-25, after I thought I had
+        // fixed the beforeEach() block, I wrote to Peter J. again about problems I was
+        // having with the it() block (see below).  In addition to answering my question
+        // about the it() block, Peter J. also helpfully pointed out that it was not
+        // necessary for me to call done() in the beforeEach block, because I was already
+        // passing it in as an argument.  I benefitted greatly from both of these suggestsions.
+        // (See also his direct message to me on 2019-06-24 at 11:06 PM PDT.)
         beforeEach(function(done){
 
             loadFeed(0, done);
-            done();
          });
-
-        it('at least one .entry element in .feed container.', function(done) {
-        // NOTE-JK-2019-06-24: After direct message from Trying new approach based on
+        // Based upon prior test, above,
+        // Also based on prior UDAC material, specifically AddressBookSpec.js, and
         // https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector
         // https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector
-            const feedDiv = document.querySelector('.feed');
-            const entryElement = (document.querySelector('.feed')).querySelector('.entry');
-            console.log(feedDiv);
-            console.log(entryElement);
-            expect(entryElement).toBeDefined();
-            expect(entryElement.length).not.toBe(0);
+        // Consulted 2019-06-22 and 2019-06-24
+        // Also based upon
+        // https://jasmine.github.io/tutorials/async
+        // Consulted 2019-06-23
+        // Also based upon
+        // https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelectorAll
+        // Consulted 2019-06-25
+        // NOTE-JK-2019-06-25: This it() method is further based upon
+        // a specific suggestion from Udacity mentor Peter J.  On 2019-06-24,
+        // after I had exhausted my ideas for modifying it(), which basically
+        // focused on using querySelector(), as follows:
+
+        //     it('at least one .entry element in .feed container.', function(done) {
+
+        //         const feedDiv = document.querySelector('.feed');
+        //         const entryElement = (document.querySelector('.feed')).querySelector('.entry');
+        //         console.log(feedDiv);
+        //         console.log(entryElement);
+        //         expect(entryElement).toBeDefined();
+        //         expect(entryElement.length).not.toBe(0);
+        //         done();
+        //     });
+
+        // I wrote to Peter J., and he again very helpfully suggested using
+        // querySelectorAll() and passing in multiple selectors, and he also provided
+        // a helpful reference:
+
+        //     "I can see that you are using querySelector method and then calling a
+        //     length method on it, which most likely returns undefined. Try using
+        //     document.querySelectorAll('.parent .child') which should give you
+        //     array of element that it found.
+
+        //     https://stackoverflow.com/questions/24090270/
+        //     how-can-i-test-that-a-value-is-greater-than-or-equal-to-in-jasmine/36577913"
+
+        // (See also his direct message to me on 2019-06-24 at 11:06 PM PDT.) His
+        // suggestion worked immediately.
+        it('at least one .entry element in .feed container.', function(done) {
+            let parentAndChildElements = document.querySelectorAll('.feed .entry');
+            // console.log(parentAndChildElements);
+            expect(parentAndChildElements).toBeDefined();
+            expect(parentAndChildElements.length).not.toBe(0);
+
             done();
-            // Brute force route foward:
-            // feedDiv.childNodes[1].childNodes[1].classList.value;
         });
     });
     /* TODO: Write a new test suite named "New Feed Selection" */
@@ -172,6 +211,7 @@ $(function() {
 // Materials relied upon in addition to Udacity course material
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of
 // consulted 2019-06-21
+
 // https://developer.mozilla.org/en-US/docs/Web/API/Document/body
 // https://developer.mozilla.org/en-US/docs/Web/API/Element/classList
 // https://devhints.io/jasmine
@@ -179,35 +219,32 @@ $(function() {
 // https://www.npmjs.com/package/jasmine-jquery
 // https://www.jsdelivr.com/package/npm/jasmine-jquery
 // https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector
+// https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector
 // https://developer.mozilla.org/en-US/docs/Web/API/Node/childNodes
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/includes
 // https://jasmine.github.io/tutorials/async
-// consulted 2019-06-22
-
-// Based on:
 // consulted 2019-06-22
 
 // https://jasmine.github.io/tutorials/async
 // https://www.techiediaries.com/jasmine-testing-tutorial/
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export
 // https://stackoverflow.com/questions/41722621/es6-in-the-browser-uncaught-syntaxerror-unexpected-token-import/45745913
-
 // consulted 2019-06-23
 
-// *************
-// const feedDiv = document.querySelector('.feed');
-// let a = feedDiv.childNodes;
-// let aArray = Array.from(a);
-// aArray[1].childNodes[1].classList[0] == 'entry';
+// https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector
+// https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector
+// Consulted 019-06-24
 
-// const feedDiv = document.querySelector('.feed');
-// let a = feedDiv.childNodes;
-// a[0].classList; //undefined
-// a[1].classList; // DOMTokenList ["entry-link", value: "entry-link"]
-// c = a[1].classList;
-// c.contains('entry-link'); //true
+// https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelectorAll
+// Consulted 2019-06-25
 
-// const entryDiv = document.querySelector('.entry');
-// entryDiv.classList.contains('feed');
-// entryDiv.parentElement.parentElement.classList.contains('feed');
+// Two specific direct messates from Udacity mentor Peter J.
+// Consulted on 2019-06-24 and 2019-06-25
+
+// https://stackoverflow.com/questions/24090270/
+// how-can-i-test-that-a-value-is-greater-than-or-equal-to-in-jasmine/36577913
+// https://jasmine.github.io/api/3.4/matchers
+// Consulted on 2019-06-25
+
+
 

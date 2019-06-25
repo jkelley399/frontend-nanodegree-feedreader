@@ -111,7 +111,7 @@ $(function() {
     /* Third test suite, which is about the behavior of loadFeed(id, cb).*/
 
 
-// TODO-JK 2019-06-24: Not currently working.
+// TODO-JK 2019-06-25: Now working based on Udacity mentor Peter J.'s help
 
     describe('Initial Entries', function() {
     /* TODO: Write a test that ensures when the loadFeed
@@ -199,12 +199,93 @@ $(function() {
             done();
         });
     });
-    /* TODO: Write a new test suite named "New Feed Selection" */
 
+    // TODO-JK-2019-06-25: Not working yet
+    /* TODO: Write a new test suite named "New Feed Selection" */
+    describe('New Feed Selection', function() {
     /* TODO: Write a test that ensures when a new feed is loaded
          * by the loadFeed function that the content actually changes.
          * Remember, loadFeed() is asynchronous.
          */
+
+        let feedArray = [];
+        let feedElements0;
+        let feedElements3;
+
+        // beforeEach(function(done){
+
+        //     loadFeed(0, done);
+        //     feedElements0 = document.querySelector('.entry');
+        //     feedArray.push(feedElements0);
+        //     loadFeed(3, done);
+        //     feedElements3 = document.querySelector('.entry');
+        //     feedArray.push(feedElements3);
+        //     console.log(feedArray);
+        //  });
+
+        it('loading 1st feed.', function(done) {
+            loadFeed(0, done);
+            feedElements0 = document.querySelector('.entry');
+            feedArray.push(feedElements0);
+            console.log(feedArray);
+            expect(feedElements0).toBeDefined();
+            expect(feedElements0).toBe(feedElements0);
+            expect(feedElements0).not.toBe(feedElements3);
+            // done();
+        });
+
+        it('loading 4th feed.', function(done) {
+            loadFeed(3, done);
+            let feedElements3 = document.querySelector('.entry');
+            feedArray.push(feedElements3);
+            console.log(feedArray);
+            expect(feedElements3).toBeDefined();
+            expect(feedElements3).toBe(feedElements3);
+            expect(feedElements3).not.toBe(feedElements0);
+            // done();
+        });
+
+        // it('loading 2nd feed.', function(done) {
+        //     loadFeed(1, done);
+        //     let feedElements1 = document.querySelectorAll('.feed .entry');
+        //     feedArray.push(feedElements1);
+        //     console.log(feedArray);
+        //     expect(feedElements1).toBe(feedElements1);
+        //     done();
+        // });
+        // it('content changes when new feed loaded.', function(done) {
+        //     // let feedArray = [];
+
+        //     let feedElements = document.querySelectorAll('.feed .entry');
+        //     feedArray.push(feedElements);
+
+        //     loadFeed(3, done);
+        //     feedElements = document.querySelectorAll('.feed .entry');
+        //     feedArray.push(feedElements);
+
+        //     console.log(feedArray);
+
+        //     expect(feedArray[0]).not.toBe(feedArray[1]);
+
+            // for (let i = 1; i < 4; i++) {
+            //     loadFeed(i, done);
+            //     feedElements = document.querySelectorAll('.feed .entry');
+            //     feedArray.push(feedElements);
+            // }
+
+            // console.log(feedArray);
+
+            // for (let i = 0; i < 4; i++) {
+            //     expect(feedArray[i]).toBeDefined();
+            //     expect(feedArray[i]).toBe(feedArray[i]);
+
+            //     for (let j = (i + 1); j < 4; j++) {
+            //         expect(feedArray[j]).toBeDefined();
+            //         expect(feedArray[i]).not.toBe(feedArray[j]);
+            //     }
+            // }
+        // });
+    });
 }());
 
 
@@ -223,6 +304,7 @@ $(function() {
 // https://developer.mozilla.org/en-US/docs/Web/API/Node/childNodes
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/includes
 // https://jasmine.github.io/tutorials/async
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export
 // consulted 2019-06-22
 
 // https://jasmine.github.io/tutorials/async

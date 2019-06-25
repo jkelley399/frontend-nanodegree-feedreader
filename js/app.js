@@ -168,7 +168,3 @@ $(function() {
 	});
 }());
 
-// exporting for tests
-// based on https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export
-// consulted 2019-06-23
-// export { loadFeed };

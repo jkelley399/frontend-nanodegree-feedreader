@@ -200,7 +200,6 @@ $(function() {
         });
     });
 
-    // TODO-JK-2019-06-25: Not working yet
     /* TODO: Write a new test suite named "New Feed Selection" */
     describe('New Feed Selection', function() {
     /* TODO: Write a test that ensures when a new feed is loaded
@@ -208,83 +207,109 @@ $(function() {
          * Remember, loadFeed() is asynchronous.
          */
 
+        // Based upon a specific suggestion from Udacity mentor Peter J.
+        // made on 2019-06-26, described in further detail below.
+        // Also based upon two articles suggested by Peter J., referenced again below:
+        // https://www.dashingd3js.com/lessons/javascript-callback-functions
+        // https://blog.bitsrc.io/understanding-asynchronous-javascript-the-event-loop-74cd408419ff
+        // consulted 2019-06-28
+
         let feedArray = [];
         let feedElements0;
-        let feedElements3;
+        let feedElements1;
 
-        // beforeEach(function(done){
+        // NOTE-JK-2019-06-28: This it() method is based upon
+        // a specific suggestion from Udacity mentor Peter J.  On 2019-06-28,
+        // after I had exhausted my ideas for modifying it(), which basically
+        // focused on calling it() twice, with two different loadFeed() methods
+        // (e.g., loadFeed(x, done) followed by loadFeed(y, done),
+        // where x and y are two different integers between 0-3), I wrote to
+        // Peter J., (A) describing the key part of my code as follows:
 
-        //     loadFeed(0, done);
-        //     feedElements0 = document.querySelector('.entry');
-        //     feedArray.push(feedElements0);
-        //     loadFeed(3, done);
-        //     feedElements3 = document.querySelector('.entry');
-        //     feedArray.push(feedElements3);
-        //     console.log(feedArray);
-        //  });
+        //     it('loading 1st feed.', function(done) {
+        //         loadFeed(0, done);
+        //         feedElements0 = document.querySelector('.entry');
+        //         feedArray.push(feedElements0);
+        //         console.log(feedArray);
+        //         expect(feedElements0).toBeDefined();
+        //         expect(feedElements0).toBe(feedElements0);
+        //         expect(feedElements0).not.toBe(feedElements3);
+        //         // done();
+        //     });
 
-        it('loading 1st feed.', function(done) {
-            loadFeed(0, done);
-            feedElements0 = document.querySelector('.entry');
-            feedArray.push(feedElements0);
-            console.log(feedArray);
-            expect(feedElements0).toBeDefined();
-            expect(feedElements0).toBe(feedElements0);
-            expect(feedElements0).not.toBe(feedElements3);
-            // done();
+        //     it('loading 4th feed.', function(done) {
+        //         loadFeed(3, done);
+        //         let feedElements3 = document.querySelector('.entry');
+        //         feedArray.push(feedElements3);
+        //         console.log(feedArray);
+        //         expect(feedElements3).toBeDefined();
+        //         expect(feedElements3).toBe(feedElements3);
+        //         expect(feedElements3).not.toBe(feedElements0);
+        //         // done();
+        //     });
+
+        // and (B) further describing the key problem that I was seeing in the output;
+
+        //     The output is particularly odd because:
+
+        //         The two arrays (as shown in the two screen shots) are identical
+        //         (you can see they reference the same "AI Training" post in the
+        //             innerText property); and
+
+        //         All of the specs pass, including the specs in which the two array
+        //         elements should be different,
+
+        //         expect(feedElements0).not.toBe(feedElements3); ....
+        //         expect(feedElements3).not.toBe(feedElements0);
+
+        // After I wrote to him, Peter J., once again, wrote back and very helpfully
+        // suggested calling loadFeed() itself the second time as the callback
+        // function that could be passed into loadFeed() when it was first called:
+
+        //     Hi John, In the last test suite. You need to call loadFeed method
+        //     twice and asynchronously. We know that loadFeed takes a 2nd argument,
+        //     which is a function that will execute once the feeds have been received
+        //     from the server. You can take advantage of that and call loadFeed again
+        //     within your callback method.
+
+        //     You would implement it somewhat similar to this
+
+        //         loadFeed(0, function() {
+        //             loadFeed(1,  done)
+        //         })
+
+        //     ....
+
+        //     He also generously directed me to some relevant articles:
+
+        //         I found a few articles that will hopefully help you understand
+        //         how javascript handles callbacks and asynchronous code execution
+
+        //         https://www.dashingd3js.com/lessons/javascript-callback-functions
+        //         https://blog.bitsrc.io/understanding-asynchronous-javascript-the-event-loop-74cd408419ff
+
+        // (See also his direct message to me on 2019-06-26 at 9:43 AM PDT.) It took me
+        // a little time to figure out how to implement his suggestion, but, once I had
+        // experimented a bit with the sequence of relevant expectations, his
+        // suggestion led to the test suite working properly.
+
+        it('loads from 1st and 2nd feeds are different.', function(done) {
+            loadFeed(0, function () {
+                loadFeed(1, done)
+                    let feedElements1 = document.querySelector('.entry');
+                    feedArray.push(feedElements1);
+                    console.log("feedArray-1" + feedArray);
+                    expect(feedElements1).toBeDefined();
+                    expect(feedElements1).toBe(feedElements1);
+                    expect(feedElements0).not.toEqual(feedElements1);
+                    expect(feedElements1).not.toEqual(feedElements0);
+                });
+                feedElements0 = document.querySelector('.entry');
+                feedArray.push(feedElements0);
+                console.log("feedArray-0" + feedArray);
+                expect(feedElements0).toBeDefined();
+                expect(feedElements0).toBe(feedElements0);
         });
-
-        it('loading 4th feed.', function(done) {
-            loadFeed(3, done);
-            let feedElements3 = document.querySelector('.entry');
-            feedArray.push(feedElements3);
-            console.log(feedArray);
-            expect(feedElements3).toBeDefined();
-            expect(feedElements3).toBe(feedElements3);
-            expect(feedElements3).not.toBe(feedElements0);
-            // done();
-        });
-
-        // it('loading 2nd feed.', function(done) {
-        //     loadFeed(1, done);
-        //     let feedElements1 = document.querySelectorAll('.feed .entry');
-        //     feedArray.push(feedElements1);
-        //     console.log(feedArray);
-        //     expect(feedElements1).toBe(feedElements1);
-        //     done();
-        // });
-        // it('content changes when new feed loaded.', function(done) {
-        //     // let feedArray = [];
-
-        //     let feedElements = document.querySelectorAll('.feed .entry');
-        //     feedArray.push(feedElements);
-
-        //     loadFeed(3, done);
-        //     feedElements = document.querySelectorAll('.feed .entry');
-        //     feedArray.push(feedElements);
-
-        //     console.log(feedArray);
-
-        //     expect(feedArray[0]).not.toBe(feedArray[1]);
-
-            // for (let i = 1; i < 4; i++) {
-            //     loadFeed(i, done);
-            //     feedElements = document.querySelectorAll('.feed .entry');
-            //     feedArray.push(feedElements);
-            // }
-
-            // console.log(feedArray);
-
-            // for (let i = 0; i < 4; i++) {
-            //     expect(feedArray[i]).toBeDefined();
-            //     expect(feedArray[i]).toBe(feedArray[i]);
-
-            //     for (let j = (i + 1); j < 4; j++) {
-            //         expect(feedArray[j]).toBeDefined();
-            //         expect(feedArray[i]).not.toBe(feedArray[j]);
-            //     }
-            // }
-        // });
     });
 }());
 
@@ -327,6 +352,10 @@ $(function() {
 // how-can-i-test-that-a-value-is-greater-than-or-equal-to-in-jasmine/36577913
 // https://jasmine.github.io/api/3.4/matchers
 // Consulted on 2019-06-25
+
+// https://www.dashingd3js.com/lessons/javascript-callback-functions
+// https://blog.bitsrc.io/understanding-asynchronous-javascript-the-event-loop-74cd408419ff
+// consulted 2019-06-28
 
 
 

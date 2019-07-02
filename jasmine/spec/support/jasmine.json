@@ -1,0 +1,22 @@
+// Started from https://jasmine.github.io/setup/nodejs.html#configuration
+
+{
+  // Trying to force Jasmine to run app.js before Jasmine
+  // I've picked the location for the spec/support directory
+  // based on this:
+
+  //   {
+  //     // Spec directory path relative to the current working dir when jasmine is executed.
+  //     "spec_dir": "spec",
+  //     .....
+
+
+  // See: https://jasmine.github.io/setup/nodejs.html#configuration
+  // But, cf. this:
+  // https://8thlight.com/blog/mike-jansen/2011/11/13/avoiding-common-errors-in-your-jasmine-specs.html
+  //   especially its reference to src_files
+
+  "spec_files": [
+    "../dist/app.js"
+  ]
+}

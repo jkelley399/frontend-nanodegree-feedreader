@@ -9,7 +9,7 @@
  * to ensure they don't run until the DOM is ready.
  */
 
-// import { loadFeed } from '../../js/app.js'
+// UDAC Project: Feed Reader Testing
 
 $(function() {
     /* This is our first test suite - a test suite just contains
@@ -112,7 +112,10 @@ $(function() {
 
 
 // TODO-JK 2019-06-25: Now working based on Udacity mentor Peter J.'s help
-
+// TODO-JK 2019-06-30: Further testing - working randomly when
+// (a) relaunching conda env, (b) running Gulp, and (c) opening
+// index.html in
+// /miniconda3/envs/baseNodeJSFeedReader/frontend-nanodegree-feedreader
     describe('Initial Entries', function() {
     /* TODO: Write a test that ensures when the loadFeed
          * function is called and completes its work, there is at least
@@ -201,6 +204,11 @@ $(function() {
     });
 
     /* TODO: Write a new test suite named "New Feed Selection" */
+
+    // TODO: NOTE-JK-2019-06-30: Testing shows works best with jquery 3.3.1,
+    // but that repeated reloads of page frequently produce different
+    // results
+
     describe('New Feed Selection', function() {
     /* TODO: Write a test that ensures when a new feed is loaded
          * by the loadFeed function that the content actually changes.
@@ -313,6 +321,7 @@ $(function() {
     });
 }());
 
+// ADDITIONAL REFERENCES CONSULTED
 
 // Materials relied upon in addition to Udacity course material
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of
@@ -356,6 +365,24 @@ $(function() {
 // https://www.dashingd3js.com/lessons/javascript-callback-functions
 // https://blog.bitsrc.io/understanding-asynchronous-javascript-the-event-loop-74cd408419ff
 // consulted 2019-06-28
+
+// https://cdnjs.com/libraries/jquery/  //for updating to 3.4.1.
+// https://cdnjs.com/libraries/jasmine/
+// https://jasmine.github.io/pages/getting_started.html
+// https://codeburst.io/switching-to-gulp-4-0-271ae63530c0
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Errors/Not_a_function
+// consulted 2019-06-30
+
+// https://classroom.udacity.com/nanodegrees/nd001/parts/20f5a632-38e6-48e7-88c8-e14c21590bb9/modules/de442af7-4ae2-48d7-a613-cf132eeaf60c/lessons/5876358842/concepts/53738292280923
+// https://github.com/jasmine/gulp-jasmine-browser
+// https://jasmine.github.io/pages/getting_started.html
+// https://classroom.udacity.com/nanodegrees/nd001/parts/20f5a632-38e6-48e7-88c8-e14c21590bb9/modules/de442af7-4ae2-48d7-a613-cf132eeaf60c/lessons/5861830171/concepts/53272908270923
+// https://www.guru99.com/node-js-testing-jasmine.html
+// https://jasmine.github.io/setup/nodejs.html#configuration
+// https://developers.google.com/chart/interactive/docs/basic_load_libs
+// https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
+// consulted 2019-07-01
+
 
 
 

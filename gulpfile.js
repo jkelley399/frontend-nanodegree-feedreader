@@ -2,56 +2,13 @@
 
 // UDAC Project: Feed Reader Testing
 
-// Based on
-// https://gulpjs.com/docs/en/api/src#errors
-// https://github.com/gulpjs/vinyl-fs/issues/292
-// https://evanhahn.com/disable-eslint-for-a-file/
-// https://packagecontrol.io/docs/usage
-// http://www.storybench.org/install-babel-packages-sublime-text-3/
-// https://nodejs.org/en/
-// https://gulpjs.com/docs/en/getting-started/quick-start
-// https://css-tricks.com/gulp-for-beginners/
-// https://gulpjs.com/
-// https://github.com/gulpjs/gulp/blob/v3.9.1/docs/API.md
-// https://packagecontrol.io/packages/SublimeLinter
-// https://packagecontrol.io/packages/SublimeLinter-eslint
-// https://eslint.org/docs/user-guide/getting-started
-// https://www.youtube.com/watch?time_continue=258&v=hppJw2REb8g
-// https://eslint.org/
-// https://eslint.org/docs/user-guide/getting-started
-// http://www.sublimelinter.com/en/latest/
-// https://github.com/SublimeLinter/SublimeLinter-eslint
-// https://eslint.org/docs/user-guide/getting-started
-// https://www.npmjs.com/package/gulp-eslint#usage
-// https://www.npmjs.com/package/gulp-babel
-// https://www.npmjs.com/package/jasmine
-// https://bytearcher.com/articles/ways-to-get-the-latest-node.js-version-on-a-mac/
-// consulted 2019-06-21
-// https://www.npmjs.com/package/@babel/core
-// https://babeljs.io/docs/en/babel-register
-// consulted 2019-06-20
-// https://gulpjs.com/docs/en/getting-started/creating-tasks#exporting
-// https://github.com/jasmine/jasmine-npm/issues/145
-// https://github.com/jasmine/jasmine-npm/issues/145#issuecomment-437613065
-// https://jasmine.github.io/setup/nodejs.html
-// https://stackoverflow.com/questions/51069142/whats-the-difference-between-uglify-js-and-uglify-es
-// consulted 2019-06-18 and also
-// https://www.sitepoint.com/automate-css-tasks-gulp/
-// https://gulpjs.com/docs/en/getting-started/quick-start
-// https://gulpjs.com/docs/en/getting-started/creating-tasks
-// https://gulpjs.com/docs/en/getting-started/async-completion
-// consulted 2019-06-17 as well as the Udacity course materials
-// https://classroom.udacity.com/nanodegrees/nd001/parts/20f5a632-38e6-48e7-88c8-e14c21590bb9/modules/de442af7-4ae2-48d7-a613-cf132eeaf60c/lessons/5831481034/concepts/55096392250923
-// https://classroom.udacity.com/nanodegrees/nd001/parts/20f5a632-38e6-48e7-88c8-e14c21590bb9/modules/de442af7-4ae2-48d7-a613-cf132eeaf60c/lessons/5876358842/concepts/53738292320923
-
-//                    NOTE: Corresponding package.json shown in comments at bottom
-
 // configuration
 
 // modules
 
 const gulp = require('gulp');
-const sass = require('gulp-sass');
+// JK-NOTE 2019-06-30: Not currently using sass
+// const sass = require('gulp-sass');
 const browserSync = require('browser-sync').create();
 const autoprefixer = require('gulp-autoprefixer');
 const eslint = require('gulp-eslint');
@@ -73,8 +30,11 @@ const babel = require('gulp-babel');
 // const pngquant = require('imagemin-pngquant');
 
 function css() {
-    return gulp.src('sass/**/*.scss')
-        .pipe(sass().on('error', sass.logError))
+// JK-NOTE 2019-06-30: Not currently using sass; prior code follows
+    // return gulp.src('sass/**/*.scss')
+    return gulp.src('css/**/*.css')
+        // JK-NOTE 2019-06-30: Not currently using sass
+        // .pipe(sass().on('error', sass.logError))
         .pipe(autoprefixer({}))
         .pipe(gulp.dest('dist/css'))
         .pipe(browserSync.stream());
@@ -121,19 +81,26 @@ function lint() {
 // In Gulp 4, need to add a parameter to allow a directory to be empty
 // See:  https://gulpjs.com/docs/en/api/src#errors
 //       https://github.com/gulpjs/vinyl-fs/issues/292
+// JK-NOTE 2019-06-30: .pipe(jasmineBrowser.feedreader())
+// currently produces error:
+// "[21:52:16] 'tests' errored after 1.64 ms
+// [21:52:16] TypeError: jasmineBrowser.feedreader is not a function"
+// See: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Errors/Not_a_function
+
 function tests() {
-    return gulp.src('tests/spec/*.js', {allowEmpty: true}) //TODO: Need to change this
+    return gulp.src('jasmine/spec/feedreader.js', {allowEmpty: true}) //TODO: Need to change this
         .pipe(jasmineBrowser.specRunner())    //TODO: May need to change this
         .pipe(jasmineBrowser.server({ port: 3001 }));
 }
 
-//    NOTE done() here seems to as as a completion call back
-//    see: https://gulpjs.com/docs/en/getting-started/async-completion
+//    NOTE done() in watch(done) seems to act as a completion parameter
+//    See: https://gulpjs.com/docs/en/getting-started/async-completion
 //    section: https://gulpjs.com/docs/en/getting-started/async-completion#using-an-error-first-callback
 
-function watch () {
+function watch (done) {
     browserSync.init({server: './dist'});
-    gulp.watch('sass/**/*.scss', gulp.series(css));
+    // JK-NOTE 2019-07-01: Not currently using sass
+    gulp.watch('css/**/*.css', gulp.series(css));
     gulp.watch('js/**/*.js', gulp.series(lint));
     gulp.watch('/index.html', gulp.series(copyHTML));
 }
@@ -145,15 +112,7 @@ exports.scripts = scripts;
 exports.dist = gulp.series(copyHTML, css, scriptsDist, watch);
 exports.default = gulp.series(copyHTML, css, lint, tests, scripts, watch);
 
-// TODO:
-// 1.    Need to sort out the dependencies regarding Babel.
-
-// COMMENTS
-// Corresponding package.json
-
-// DRAFT OF README.md
-
-// INSTALLATION REQUIREMENTS
+// ADDITIONAL REFERENCES CONSULTED
 
 // Note: Unless otherwise indicated, most of this is based upon the lessons
 // "Productive Editing," "Powerful Builds," "Expressive Line Editing,"
@@ -161,6 +120,51 @@ exports.default = gulp.series(copyHTML, css, lint, tests, scripts, watch);
 // Udacity Front-End Web Developer Nanodegree Program module,
 // "6. JavaScript Tools & Testing," beginning at:
 // https://classroom.udacity.com/nanodegrees/nd001/parts/20f5a632-38e6-48e7-88c8-e14c21590bb9/modules/de442af7-4ae2-48d7-a613-cf132eeaf60c/lessons/5824421053/concepts/53224206220923
+
+// These additional materials have been relied upon and consulted on various
+// days that I no longer remember:
+// https://gulpjs.com/docs/en/api/src#errors
+// https://github.com/gulpjs/vinyl-fs/issues/292
+// https://evanhahn.com/disable-eslint-for-a-file/
+// https://packagecontrol.io/docs/usage
+// http://www.storybench.org/install-babel-packages-sublime-text-3/
+// https://nodejs.org/en/
+// https://gulpjs.com/docs/en/getting-started/quick-start
+// https://css-tricks.com/gulp-for-beginners/
+// https://gulpjs.com/
+// https://github.com/gulpjs/gulp/blob/v3.9.1/docs/API.md
+// https://packagecontrol.io/packages/SublimeLinter
+// https://packagecontrol.io/packages/SublimeLinter-eslint
+// https://eslint.org/docs/user-guide/getting-started
+// https://www.youtube.com/watch?time_continue=258&v=hppJw2REb8g
+// https://eslint.org/
+// https://eslint.org/docs/user-guide/getting-started
+// http://www.sublimelinter.com/en/latest/
+// https://github.com/SublimeLinter/SublimeLinter-eslint
+// https://eslint.org/docs/user-guide/getting-started
+// https://www.npmjs.com/package/gulp-eslint#usage
+// https://www.npmjs.com/package/gulp-babel
+// https://www.npmjs.com/package/jasmine
+// https://bytearcher.com/articles/ways-to-get-the-latest-node.js-version-on-a-mac/
+// consulted 2019-06-21
+// https://www.npmjs.com/package/@babel/core
+// https://babeljs.io/docs/en/babel-register
+// consulted 2019-06-20
+// https://gulpjs.com/docs/en/getting-started/creating-tasks#exporting
+// https://github.com/jasmine/jasmine-npm/issues/145
+// https://github.com/jasmine/jasmine-npm/issues/145#issuecomment-437613065
+// https://jasmine.github.io/setup/nodejs.html
+// https://stackoverflow.com/questions/51069142/whats-the-difference-between-uglify-js-and-uglify-es
+// consulted 2019-06-18 and also
+// https://www.sitepoint.com/automate-css-tasks-gulp/
+// https://gulpjs.com/docs/en/getting-started/quick-start
+// https://gulpjs.com/docs/en/getting-started/creating-tasks
+// https://gulpjs.com/docs/en/getting-started/async-completion
+// consulted 2019-06-17 as well as the Udacity course materials
+// https://classroom.udacity.com/nanodegrees/nd001/parts/20f5a632-38e6-48e7-88c8-e14c21590bb9/modules/de442af7-4ae2-48d7-a613-cf132eeaf60c/lessons/5831481034/concepts/55096392250923
+// https://classroom.udacity.com/nanodegrees/nd001/parts/20f5a632-38e6-48e7-88c8-e14c21590bb9/modules/de442af7-4ae2-48d7-a613-cf132eeaf60c/lessons/5876358842/concepts/53738292320923
+
+
 
 // Dependencies
 
@@ -188,6 +192,20 @@ exports.default = gulp.series(copyHTML, css, lint, tests, scripts, watch);
 // Frequently updated, so go ahead and update:
 //     -update locally: npm update
 //     -update globally: npm install -g npm
+
+// JK-NOTE 2019-07-01: Looks like puppeteer may also be required,
+// so adding it to the build sequence
+
+
+// TODO-2019-07-01: Since we will be using gulp-jasmine-browser and will want to run
+// tests from the terminal, install puppeteer
+// (For refernce, see Section 7, "Unit Testing in Gulp," in Lesson 5,
+//     "How to Prevent Disasters," in the Udacity FED-ND Part 6,
+//     "JavaScript Tools & Testing,"
+//     https://classroom.udacity.com/nanodegrees/nd001/parts/20f5a632-38e6-48e7-88c8-e14c21590bb9/modules/de442af7-4ae2-48d7-a613-cf132eeaf60c/lessons/5876358842/concepts/53738292280923)
+
+// Install puppeteer
+//     npm install puppeteer
 
 // Install Gulp
 //     npm install --g gulp-cli
@@ -217,18 +235,55 @@ exports.default = gulp.series(copyHTML, css, lint, tests, scripts, watch);
 //         https://github.com/gulpjs/gulp/blob/v3.9.1/docs/API.md
 
 // Install the other Gulp dependencies required in gulfile.js
-//     using the same npm techniques, making sass, autoprefixer,
+//     using the same npm techniques, making autoprefixera
 //     and eslint additional devDependencies (once more, be sure
 //         you're in your project root):
 
 //         npm install --save-dev gulp-autoprefixer
 //         npm install --save-dev jasmine
+//         npm install --save-dev gulp-babel @babel/core @babel/preset-env
 
 //         npm install gulp-sass
 //         npm install gulp-eslint
 //         npm install browser-sync
 //         npm install gulp-jasmine-browser
 //         npm install --save-dev gulp-babel @babel/core @babel/preset-env
+
+// TODO-2019-07-01: Although not been currently implemented, it is worth noting that:
+
+// 1.  If one wanted to produce a more compact distribution, it would also be
+// desirable to install additional gulp dependencies, e.g.,
+
+// const concat = require('gulp-concat');
+// const uglify = require('gulp-uglify');
+// const sourcemaps = require('gulp-sourcemaps');
+// const imagemin = require('gulp-imagemin');
+// const pngquant = require('imagemin-pngquant');
+
+// See, generally, Udacity FED-ND Part 6, ["JavaScript Tools & Testing"]
+// (https://classroom.udacity.com/nanodegrees/nd001/parts/20f5a632-38e6-48e7-88c8-e14c21590bb9/modules/de442af7-4ae2-48d7-a613-cf132eeaf60c/lessons/5861830171/concepts/53272908270923)
+
+
+// 2.  The Jasmine documentation for Node.js recommends some additional commands
+// to facilitate running Jasmine tests under npm at the command line.
+
+//     Add Jasmine to your package.json
+
+//         `npm install --save-dev jasmine`
+
+//     Initialize Jasmine in your project
+
+//         `node node_modules/jasmine/bin/jasmine init`
+
+//     Set jasmine as your test script in your package.json
+
+//         `"scripts": { "test": "jasmine" }`
+
+//     Run your tests
+
+//         `npm test`
+
+// See: [JASMINE FOR NODE.JS](https://jasmine.github.io/pages/getting_started.html)
 
 // Note: The following section on eslint is based almost exclusively
 // on the lesson, "How to Prevent Disasters," in the
@@ -317,7 +372,7 @@ exports.default = gulp.series(copyHTML, css, lint, tests, scripts, watch);
 //         http://www.sublimelinter.com/en/latest/
 //         https://github.com/SublimeLinter/SublimeLinter-eslint
 
-// For other informaiton on configuring ESLint, including how to
+// For other information on configuring ESLint, including how to
 //     install it globally and the use of a configuration file, see:
 //         https://eslint.org/docs/user-guide/getting-started
 

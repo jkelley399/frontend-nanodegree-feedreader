@@ -1,3 +1,9 @@
+/*eslint-env jasmine, jquery */
+// Above based on
+// https://eslint.org/docs/user-guide/configuring
+// https://eslint.org/docs/user-guide/configuring#specifying-environments
+// Consulted 2019-07-03
+
 /* feedreader.js
  *
  * This is the spec file that Jasmine will read and contains
@@ -10,7 +16,11 @@
  */
 
 // UDAC Project: Feed Reader Testing
-
+// Following line re disabling eslint on next line based on:
+// https://stackoverflow.com/questions/27732209/turning-off-eslint-rule-for-a-specific-line
+// https://eslint.org/docs/user-guide/configuring.html#disabling-rules-with-inline-comments
+// Consulted on 2019-07-04
+// eslint-disable-next-line
 $(function() {
     /* This is our first test suite - a test suite just contains
     * a related set of tests. This suite is all about the RSS
@@ -29,11 +39,6 @@ $(function() {
             expect(allFeeds.length).not.toBe(0);
         });
 
-        /* TODO: Write a test that loops through each feed
-         * in the allFeeds object and ensures it has a URL defined
-         * and that the URL is not empty.
-         */
-
         /* the for...loop in each of the following two tests is based upon
          * https://developer.mozilla.org/en-US/docs/Web/JavaScript
          * /Reference/Statements/for...of
@@ -46,10 +51,6 @@ $(function() {
             }
         });
 
-        /* TODO: Write a test that loops through each feed
-         * in the allFeeds object and ensures it has a name defined
-         * and that the name is not empty.
-         */
         it('and all their names are defined and non-empty', function() {
             for (let feed of allFeeds) {
                 expect(feed.name).toBeDefined();
@@ -58,39 +59,21 @@ $(function() {
         });
     });
 
-    /* TODO: Write a new test suite named "The menu" */
-    /* Second test suite, which is about the behavior of the menu.*/
     describe('The menu', function() {
-        /* TODO-JK: Write a test that ensures the menu element is
-         * hidden by default. You'll have to analyze the HTML and
-         * the CSS to determine how we're performing the
-         * hiding/showing of the menu element.
-         */
-
         // This behavior is controlled by index.html in the body element.
-        // A constant has been added to app.js, bodyElementClassList,
-        // to save document.body.classList at load.  This test checks
-        // to see whether that classList contains 'menu-hidden'
-        // which is the class in style.css that moves the body element
-        // outside the viewport and hides it.
-        // Use of toContain based on: https://devhints.io/jasmine
-        // consulted 2019-06-22
+        // Based upon feedback received from an anonymous Udacity reviewer
+        // on 2019-07-02, this test has been revised substantially, and the new
+        // test is from the express implementation suggestion in that feedback.
+        // (Besides the reviewer's suggested code., perhaps the most important thing I
+        // learned from the feedback in the present context was this:
+        // "Since the project uses jQuery as a dependency it can be used also with
+        // testing, for instance you can make use of jQuery selector and hasClass method"
+        // The specific implementation below is the reviewer's suggested code:
         it('is hidden by default', function() {
-            expect(bodyElementClassList).toContain('menu-hidden');
+            expect($('body').hasClass('menu-hidden')).toBe(true);
         });
-
-        /* TODO: Write a test that ensures the menu changes
-          * visibility when the menu icon is clicked. This test
-          * should have two expectations: does the menu display when
-          * clicked and does it hide when clicked again.
-          */
-
         // This behavior is controlled by app.js in menuIcon.on.
-        // A variable has been added to app.js, bodyElementIsHidden,
-        // to capture the state of the toggling of the 'menu-hidden' class.
-        // Use of toContain based on: https://devhints.io/jasmine
-        // consulted 2019-06-22
-        // TODO-JK: Another, and more interesting, approach to this test might be to use
+        // TODO-JK: Another approach to this test might be to use
         // the [jasmine-jquery extension](https://github.com/velesin/jasmine-jquery),
         // which seems to be available [using npm](https://www.npmjs.com/package/jasmine-jquery),\
         // and [through a cdn](https://www.jsdelivr.com/package/npm/jasmine-jquery).
@@ -98,32 +81,29 @@ $(function() {
         // has a section, "Event spies," that suggests how one might instead spy
         // on the click events to which menuIcon.on in app.js responds.
 
+        // Based upon feedback received from an anonymous Udacity reviewer
+        // on 2019-07-02, this test has been revised substantially, and the new
+        // test is from the express implementation suggestion in that feedback.
+        // (Besides the reviewer's suggested code., perhaps the most important thing I
+        // learned from the feedback in the present context was the continued
+        // suggestion to use jQuery in writing the test:
+
+        //     "Using jQuery
+        //     $('.menu-icon-link').click()"
+
+        // See also the above comment on the prior test.
+        // The specific implementation below is the reviewer's suggested code:
 
         it('changes visibly when menu icon clicked', function() {
-            if (bodyElementIsHidden) {
-                expect(bodyElementClassList).toContain('menu-hidden');
-            } else {
-                expect(bodyElementClassList).not.toContain('menu-hidden');
-            }
+            $('.menu-icon-link').click();
+            expect($('body').hasClass('menu-hidden')).toBe(false);
+            $('.menu-icon-link').click();
+            expect($('body').hasClass('menu-hidden')).toBe(true);
         });
     });
-    /* TODO: Write a new test suite named "Initial Entries" */
-    /* Third test suite, which is about the behavior of loadFeed(id, cb).*/
 
-
-// TODO-JK 2019-06-25: Now working based on Udacity mentor Peter J.'s help
-// TODO-JK 2019-06-30: Further testing - working randomly when
-// (a) relaunching conda env, (b) running Gulp, and (c) opening
-// index.html in
-// /miniconda3/envs/baseNodeJSFeedReader/frontend-nanodegree-feedreader
+    // 2019-06-25: Now working based on Udacity mentor Peter J.'s help
     describe('Initial Entries', function() {
-    /* TODO: Write a test that ensures when the loadFeed
-         * function is called and completes its work, there is at least
-         * a single .entry element within the .feed container.
-         * Remember, loadFeed() is asynchronous so this test will require
-         * the use of Jasmine's beforeEach and asynchronous done() function.
-         */
-
         // Based upon prior test, above,
         // Also based on prior UDAC material, specifically AddressBookSpec.js, and
         // https://developer.mozilla.org/en-US/docs/Web/API/Document/
@@ -131,7 +111,7 @@ $(function() {
         // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/
         // Global_Objects/Array/includes
         // Consulted 2019-06-22
-        // TODO: Also based upon
+        // Also based upon
         // https://jasmine.github.io/tutorials/async
         // Consulted 2019-06-23
 
@@ -149,9 +129,13 @@ $(function() {
         // passing it in as an argument.  I benefitted greatly from both of these suggestsions.
         // (See also his direct message to me on 2019-06-24 at 11:06 PM PDT.)
         beforeEach(function(done){
-
+        // Following line re disabling eslint on next line based on:
+        // https://stackoverflow.com/questions/27732209/turning-off-eslint-rule-for-a-specific-line
+        // https://eslint.org/docs/user-guide/configuring.html#disabling-rules-with-inline-comments
+        // Consulted on 2019-07-04
+        // eslint-disable-next-line
             loadFeed(0, done);
-         });
+        });
         // Based upon prior test, above,
         // Also based on prior UDAC material, specifically AddressBookSpec.js, and
         // https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector
@@ -193,40 +177,76 @@ $(function() {
 
         // (See also his direct message to me on 2019-06-24 at 11:06 PM PDT.) His
         // suggestion worked immediately.
-        it('at least one .entry element in .feed container.', function(done) {
-            let parentAndChildElements = document.querySelectorAll('.feed .entry');
-            // console.log(parentAndChildElements);
-            expect(parentAndChildElements).toBeDefined();
-            expect(parentAndChildElements.length).not.toBe(0);
+        // NOTE-JK-2019-07-04: Old code follows, refactored below, being kept for
+        // educational reference, to facilitate comparison, at present
+        // it('at least one .entry element in .feed container.', function(done) {
+        //     let parentAndChildElements = document.querySelectorAll('.feed .entry');
+        //     // console.log(parentAndChildElements);
+        //     expect(parentAndChildElements).toBeDefined();
+        //     expect(parentAndChildElements.length).not.toBe(0);
 
-            done();
+        //     done();
+        // });
+
+        // Refactored based upon feedback received from an anonymous Udacity reviewer
+        // on 2019-07-02, this test has been revised substantially, and the new
+        // test is from the express implementation suggestion in that feedback.
+        // (Besides the reviewer's suggested code., perhaps the two most important things I
+        // learned from the feedback in the present context were the reviewer's:
+        // (a) comment about the scope of Document:
+        //  "done callback function is not necessarily in the it function scope, only in the
+        //  beforeEach function scope, but the test works correctly :+1:, you can simplify
+        //  the code"
+        //  (b) continuing suggestion to use jQuery in writing the test
+        // See also the above comments regarding suggestions from the reviewer.
+        // The specific implementation below is the reviewer's suggested code:
+
+        it('at least one .entry element in .feed container.', function() {
+            expect($('.feed .entry').length).not.toBe(0);
         });
     });
 
-    /* TODO: Write a new test suite named "New Feed Selection" */
-
-    // TODO: NOTE-JK-2019-06-30: Testing shows works best with jquery 3.3.1,
+    // NOTE-JK-2019-06-30: Testing shows works best with jquery 3.3.1,
     // but that repeated reloads of page frequently produce different
     // results
 
     describe('New Feed Selection', function() {
-    /* TODO: Write a test that ensures when a new feed is loaded
-         * by the loadFeed function that the content actually changes.
-         * Remember, loadFeed() is asynchronous.
-         */
-
-        // Based upon a specific suggestion from Udacity mentor Peter J.
+        // Originally based upon a specific suggestion from Udacity mentor Peter J.
         // made on 2019-06-26, described in further detail below.
-        // Also based upon two articles suggested by Peter J., referenced again below:
+        // Originally also based upon two articles suggested by Peter J., referenced again below:
         // https://www.dashingd3js.com/lessons/javascript-callback-functions
         // https://blog.bitsrc.io/understanding-asynchronous-javascript-the-event-loop-74cd408419ff
         // consulted 2019-06-28
-
-        let feedArray = [];
         let feedElements0;
         let feedElements1;
 
-        // NOTE-JK-2019-06-28: This it() method is based upon
+        // Refactored based upon feedback received from an anonymous Udacity reviewer
+        // on 2019-07-02.  beforeEach has been added and implemented
+        // based on the express implementation suggestion in that feedback.
+        // (Besides the reviewer's suggested code., perhaps the two most important things I
+        // learned from the feedback in the present context were the reviewer's:
+        // (a) comments the sequence for assigning one of the variables in relationship
+        // to calling loadFeed() and using the beforeEach() function:
+
+        //     "...but you must assign the variable feedElements0 before invoking
+        //     the second loadFeed and all these should be processed inside
+        //     beforeEach function"
+
+        //  (b) continuing suggestion to use jQuery in writing the test
+        // See also the above comments regarding suggestions from the reviewer.
+        // The specific implementation below is the reviewer's suggested code:
+
+        beforeEach(function(done) {
+            loadFeed(0, function() {
+                feedElements0 = $('.feed').html();
+                loadFeed(1, function() {
+                    feedElements1 = $('.feed').html();
+                    done();
+                });
+            });
+        });
+
+        // Originally this it() method was based upon
         // a specific suggestion from Udacity mentor Peter J.  On 2019-06-28,
         // after I had exhausted my ideas for modifying it(), which basically
         // focused on calling it() twice, with two different loadFeed() methods
@@ -301,22 +321,17 @@ $(function() {
         // experimented a bit with the sequence of relevant expectations, his
         // suggestion led to the test suite working properly.
 
-        it('loads from 1st and 2nd feeds are different.', function(done) {
-            loadFeed(0, function () {
-                loadFeed(1, done)
-                    let feedElements1 = document.querySelector('.entry');
-                    feedArray.push(feedElements1);
-                    console.log("feedArray-1" + feedArray);
-                    expect(feedElements1).toBeDefined();
-                    expect(feedElements1).toBe(feedElements1);
-                    expect(feedElements0).not.toEqual(feedElements1);
-                    expect(feedElements1).not.toEqual(feedElements0);
-                });
-                feedElements0 = document.querySelector('.entry');
-                feedArray.push(feedElements0);
-                console.log("feedArray-0" + feedArray);
-                expect(feedElements0).toBeDefined();
-                expect(feedElements0).toBe(feedElements0);
+        // Refactored based upon feedback received from an anonymous Udacity reviewer
+        // on 2019-07-02.  After adding the beforeEach() function above
+        // based on the express implementation suggestion in that feedback,
+        // the it() function has been bastly simplified, in keeping with the reviewer's
+        // comment, "some lines of the code are unnecessary...."  In addition, I
+        // learned from seeing how the reviewer had eliminated the "done" parameter
+        // in the it() function.  The specific implementation below is the reviewer's
+        // suggested code.
+
+        it('loads from 1st and 2nd feeds are different.', function() {
+            expect(feedElements1).not.toEqual(feedElements0);
         });
     });
 }());
@@ -383,6 +398,17 @@ $(function() {
 // https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
 // consulted 2019-07-01
 
+// Multiple specific, detailed suggestions, including specific code,
+// provided by anonymous Udacity review in 2019-07-02 code review
+// Consulted on 2019-07-03 and 2019-07-04
 
+// https://eslint.org/docs/user-guide/configuring
+// https://eslint.org/docs/user-guide/configuring#specifying-environments
+// https://stackoverflow.com/questions/53659193/how-do-i-tell-eslint-that-another-file-is-included-before-the-current-one
+// https://stackoverflow.com/questions/27732209/turning-off-eslint-rule-for-a-specific-line
+// https://eslint.org/docs/user-guide/configuring.html#disabling-rules-with-inline-comments
+// https://www.npmjs.com/package/puppeteer
+// https://scotch.io/tutorials/how-to-use-browsersync-for-faster-development#toc-using-browsersync
+// Consulted on 2019-07-04
 
 

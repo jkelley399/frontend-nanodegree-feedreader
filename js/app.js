@@ -32,11 +32,11 @@ var allFeeds = [
 // and https://developer.mozilla.org/en-US/docs/Web/API/Element/classList
 // consulted 2019-06-22
 // This constant is used in the 'is hidden by default' test
-const bodyElementClassList = document.body.classList;
+// const bodyElementClassList = document.body.classList;
 
 // Tracks the toggle state of the body element
 // This variable is used in the 'changes visibly when menu icon clicked' test
-let bodyElementIsHidden = true;
+// let bodyElementIsHidden = true;
 
 // NOTE-JK-2019-06-23: Trying different approach...
 // Tracks whether loadFeed(id, cb) has run successfully
@@ -157,13 +157,13 @@ $(function() {
 	 * the 'changes visibly when menu icon clicked' test.
 	 * The console log statements were added for testing of that test.
 	 */
-		if (bodyElementIsHidden) {
-			bodyElementIsHidden = false;
-            // console.log('menu is not hidden');
-		} else {
-			bodyElementIsHidden = true;
-            // console.log('menu is hidden');
-		}
+		// if (bodyElementIsHidden) {
+		// 	bodyElementIsHidden = false;
+  //           // console.log('menu is not hidden');
+		// } else {
+		// 	bodyElementIsHidden = true;
+  //           // console.log('menu is hidden');
+		// }
 		$('body').toggleClass('menu-hidden');
 	});
 }());

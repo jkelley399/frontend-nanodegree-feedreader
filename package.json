@@ -22,7 +22,8 @@
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^6.1.0",
     "gulp-babel": "^8.0.0",
-    "jasmine": "^3.4.0"
+    "jasmine": "^3.4.0",
+    "puppeteer": "^1.18.1"
   },
   "dependencies": {
     "browser-sync": "^2.26.7",

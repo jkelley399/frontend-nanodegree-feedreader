@@ -3,9 +3,21 @@
 ## Introduction
 This project is being submitted in connection with part 6, "JavaScript Tools & Testing," of the Udacity Front-End Web Developer Nanodegree.   *See*: ["Project: Feed Reader Testing, Project Overview"](https://classroom.udacity.com/nanodegrees/nd001/parts/20f5a632-38e6-48e7-88c8-e14c21590bb9/modules/85de54c3-1646-44c5-9d81-228c05d9f3fc/lessons/3442558598239847/concepts/34347387230923).  The implementation of this project is based upon the starter code.  *See*: ["udacity/frontend-nanodegree-feedreader"](https://github.com/udacity/frontend-nanodegree-feedreader).  No additional functionality has been developed to date.
 
+## Simple Approach
+
+This simple approach is based upon the express implementation suggestions
+of the first anonymous Udacity reviewer on 2019-07-02.
+
+- Open a relatively current browser
+- In the address bar, open `./dist/index.html`
+- Once the page opens, scroll to the bottom of the page to view the results of the tests run by Jasmine.
+
+For additional information about this project, particularly the automation and testing environment, please see the additional documentation below.
+
 ## Table of Contents
 
 - [Introduction](#introduction)
+- [Simple Approach](#simple-approach)
 - [Table of Contents](#table-of-contents)
 - [Instructions](#instructions)
     - [Project Instructions](#project-instructions)
@@ -90,10 +102,10 @@ Most of the other requirements for the project relate to build tools for the tes
     - In terminal
         - `npm -v`
 - npm is frequently updated, updating it is recommended:
-    -Update locally:
+    - Update locally:
         - In terminal
             - `npm update`
-    Update globally:
+    - Update globally:
         - In terminal
             - `npm install -g npm`
 
@@ -114,6 +126,7 @@ That command will ask some questions and then create the `package.json`.
 
     - To confirm installation, in terminal, run:
         -   `gulp -v`
+
     - NOTE: For this particular implementation, Gulp 4.0.2 is used.
 
     - For more information on Gulp and Gulp's API, *see*:
@@ -131,18 +144,18 @@ That command will ask some questions and then create the `package.json`.
     - [Gulp getting started docs](https://gulpjs.com/docs/en/getting-started/quick-start)
     - [CSS Tricks introductory Gulp post](https://css-tricks.com/gulp-for-beginners/)
 
-- Next, install the other Gulp dependencies required using the same npm techniques, making autoprefixer and eslint additional devDependencies (once more, be sure (a) you're in your project root and (b) using terminal):
+- Next, install the other Gulp dependencies and Puppeteer using the same npm techniques, making autoprefixer and eslint additional devDependencies (once more, be sure (a) you're in your project root and (b) using terminal):
 
 ```
-npm install --save-dev gulp-autoprefixer`
-npm install --save-dev jasmine`
-npm install --save-dev gulp-babel @babel/core @babel/preset-env`
+npm install --save-dev gulp-autoprefixer
+npm install --save-dev jasmine
+npm install --save-dev puppeteer
+npm install --save-dev gulp-babel @babel/core @babel/preset-env
 
-npm install gulp-sass`
-npm install gulp-eslint`
-npm install browser-sync`
-npm install gulp-jasmine-browser`
-npm install --save-dev gulp-babel @babel/core @babel/preset-env`
+npm install gulp-eslint
+npm install browser-sync
+npm install gulp-jasmine-browser
+npm install --save-dev gulp-babel @babel/core @babel/preset-env
 ```
 Having completed these steps, your `package.json` file should have have these dependencies and devDependencies:
 
@@ -170,13 +183,13 @@ Having completed these steps, your `package.json` file should have have these de
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^6.1.0",
     "gulp-babel": "^8.0.0",
-    "jasmine": "^3.4.0"
+    "jasmine": "^3.4.0",
+    "puppeteer": "^1.18.1"
   },
   "dependencies": {
     "browser-sync": "^2.26.7",
     "gulp-eslint": "^5.0.0",
-    "gulp-jasmine-browser": "^4.1.0",
-    "gulp-sass": "^4.0.2"
+    "gulp-jasmine-browser": "^4.1.0"
   }
 }
 ```
@@ -241,9 +254,7 @@ Udacity Front-End Web Developer Nanodegree Program module,
 - Instead of modifying the configuration of ESLint, one can alternatively choose to keep ESLint from parsing a particular file by using `/* eslint-disable */` as the first comment at the top of the appropriate file.
     - *See*: https://evanhahn.com/disable-eslint-for-a-file/
 
-- Alternatively, one can configure ESLint not to produce certain kinds of warnings by understanding the environment in which a file will run.  For example, because this project is intended to run under node, gulpfile.json has a comment at the top of the file,
-
-        /*eslint-env node */
+- Alternatively, one can configure ESLint not to produce certain kinds of warnings by understanding the environment in which a file will run.  For example, because this project is intended to run under node, gulpfile.json has a comment at the top of the file, `/*eslint-env node */`
 
     -   That statement notifies ESLint to turn off Node.js warnings in this file.  While this type of comment acts like a configuration setting, it is
     located in and only affects the file in which it is placed.
@@ -343,8 +354,7 @@ $ gulp
 - When `index.html` has opened, `feedreader.js` will be triggered, and you should see:
     - the first page produced by app.js, "Udacity Blog," and
     - at the bottom of the page, the output from the Jasmine test suites below a headline
-        -in this example, the headline reads,
-            `7 specs, 0 failures, randomized with seed 13945'
+        - in this example, the headline reads: `7 specs, 0 failures, randomized with seed 13945`
 
 - The entire page should look like this
 
@@ -362,91 +372,86 @@ I have not tried to host this project GitHub Pages at this time.
 
 There are at least two known significant implementation problems, and one additional possible problem, at present:
 
-1.  Variable test results
-    1.  Although the application does appear to pass all of the Jasmine test suites, it is not doing so consistently.  Indeed, after considerable testing, the results of the Jasmine test suites appear to depend, at least most of the time, on the order in which they are called by Jasmine.
-        1.  Sometimes the application passes on the initial run, and sometimes it fails.
-    2.  As presently configured, Jasmine runs the test suites in random order.  When the random setting is on, the application passes all of the test suites, very approximately, 50% of the time.
-        1.  For example, running the application initially and then clicking on the reload button adjacent to the address bar in Chrome repeatedly produced 10 sets of results.
-        2.  *See* the 10 screenshots arranged chronologically from Screen Shot 2019-07-01 at 1.59.17 PM to Screen Shot 2019-07-01 at 2.00.53 PM inhttps://github.com/jkelley399/frontend-nanodegree-feedreader/tree/master/addl_images/debugging
-    3.  On the other hand, if the run test randomly option in Jasmine is turned off, the Jasmine test suites appear to fail fairly consistently.
-        1.  *See* the 2 screenshots arranged chronologically from Screen Shot 2019-07-01 at 2.01.12 PM to Screen Shot Screen Shot 2019-07-01 at 2.01.49 PM in https://github.com/jkelley399/frontend-nanodegree-feedreader/tree/master/addl_images/debugging
-    4.  Furthermore, the very variability of these test results has made it difficult to debug them.
-        1.  For example, changing a line or two and then reloading the page may or may not give correct information about whether the change has been helpful or not.
-2.  As discussed above (*see* [Running Locally](#running-locally)), there is a bug in the current implementation that requires additional manual intervention in order to run the application.
-    1.  While Browsersync is serving files from `./dist`, it appears that there is some type of configuration error that prevents it from properly running the Jasmine test file, `./jasmine/spec/feedreader.js` automatically.
-3.  A third possible implementation problem concerns error handling.
+1.  As discussed above (*see* [Running Locally](#running-locally)), there is a bug in the current implementation that requires additional manual intervention in order to run the application.
+    1.  It appears that there is some type of configuration error that prevents the application from properly running the Jasmine test file, `./jasmine/spec/feedreader.js` automatically.
+        1.  While the revised tests now all run, there appears to still be a problem in the Gulp implementation.
+        When `index.html` first loads, even though running `gulp` at the command line results in `Browsersync` serving files from `./dist`,
+            1.  it is using port 3000, and
+            2.  Jasmine reports: `Incomplete: No specs found, , randomized with seed 78363`
+    2.  As explained above (*see* [Running Locally](#running-locally)), to remedy this manually, the user must open `./dist/index.html` in the address bar, and, when the page reloads, Jasmine runs all the tests, and they all pass:
+
+```
+7 specs, 0 failures, randomized with seed 63286`
+- Initial Entries
+    - at least one .entry element in .feed container.
+- The menu
+    - changes visibly when menu icon clicked
+    - is hidden by default
+- RSS Feeds
+    - and all their names are defined and non-empty
+    - and all their URLs are defined and non-empty
+    - are defined
+- New Feed Selection
+    - loads from 1st and 2nd feeds are different.
+```
+
+2.  Accordingly, there appear to be two significant implementation problems for which I have the following questions about the current state of the testing environment:
+    1.  Why, despite the `tests()` function in `gulpfile.js` specifying
+    `.pipe(jasmineBrowser.server({ port: 3001 }));` is the browser loading
+    `index.html` initially on port 3000?
+    2.  Why, despite `index.html` specifying the location of the
+    Jasmine test directory @ l. 57 as
+    `<script src="../jasmine/spec/feedreader.js"></script>` do the tests
+    fail to run on the initial load?
+
+3.  In addition, third possible implementation problem concerns error handling.
     1.  ["Instructions"](https://classroom.udacity.com/nanodegrees/nd001/parts/20f5a632-38e6-48e7-88c8-e14c21590bb9/modules/85de54c3-1646-44c5-9d81-228c05d9f3fc/lessons/3442558598239847/concepts/34300788080923) states in part:
 
 > Error handling should be implemented for undefined variables and out-of-bound array access
 
-2.  It is unclear what exactly this means in the context of the current project.  Consequently, it is not known whether this submission standard has been met or not.
+It is unclear what exactly this means in the context of the current project.  Consequently, it is not known whether this submission standard has been met or not.
 
 ## Starting Points and References
 
 - The principal starting points and references were described in the [Project Instructions](#project-instructions).
 
-- I am particularly grateful for the considerable assistance that has been provided by Udacity mentor Peter J. three separate times both generally and specifically in connection with two test suites in feedreader.js:
+- I am particularly grateful for the considerable assistance that has been provided by any anonymous Udacity reviewer on 2019-07-02.  That assistance is detailed in the comments in 'feedreader.js'.  As explained there, the reviewer's specific implementation suggests and suggested code are incorporated into *The Menu* and the *Initial Entries* tests suits.  I am especiall indebted to the anonymous reviewer for pointing out, among other things, that, and specifically how, jQuery could be used in writing the test suits.
 
-    - In the 'Initial Entries' test suite, with regard to both the beforeEach() method and the it() method, and
-    - In the 'New Feed Selection' test suite, with regard to the it() method.
+- I am also particularly grateful for the considerable assistance that has been provided by Udacity mentor Peter J. three separate times both generally and specifically in connection with two test suites in feedreader.js:
+
+    - In the `Initial Entries` test suite, with regard to both the beforeEach() method and the it() method, and
+    - In the `New Feed Selection` test suite, with regard to the it() method.
     - For details on the assistance provided, please see the comments in:
         - [feedreader](https://github.com/jkelley399/frontend-nanodegree-feedreader/blob/master/jasmine/spec/feedreader.js) and
         - [gulpfile](https://github.com/jkelley399/frontend-nanodegree-feedreader/blob/master/gulpfile.js)
 
--Additional materials relied upon are described in the:
-
-    - "ADDITIONAL REFERENCES CONSULTED" section of [gulpfile](https://github.com/jkelley399/frontend-nanodegree-feedreader/blob/master/gulpfile.js) and
-    - "ADDITIONAL REFERENCES CONSULTED" section of [feedreader](https://github.com/jkelley399/frontend-nanodegree-feedreader/blob/master/jasmine/spec/feedreader.js)
+-Additional materials relied upon are described in the "ADDITIONAL REFERENCES CONSULTED" section of [gulpfile](https://github.com/jkelley399/frontend-nanodegree-feedreader/blob/master/gulpfile.js) and
+"ADDITIONAL REFERENCES CONSULTED" section of [feedreader](https://github.com/jkelley399/frontend-nanodegree-feedreader/blob/master/jasmine/spec/feedreader.js)
 
 ## TODO
 
-1.  Test and possible fix the testing and automation environment and implementation
+1.  Fix the testing and automation environment and implementation
     1.  Current ideas include trying the following:
-        1.      Install puppeteer (see gulp.js)
-        2.      Try initalizing and reconfiguring the testing for Jasmine (see gulp.js)
-                    `node node_modules/jasmine/bin/jasmine init`
-                    `"scripts": { "test": "jasmine" }`
-    2.     Check on modifying the 'New Feed Selection'
-                test suite to make the two calls to
-                loadFeed(n, cb) IIFEs.  Perhaps that would
-                improve the asynchronicity of that test suite.
-    3.      Check on adding (a) `/*eslint-env node */` or other
-                eslint commands to the top of feedreader.js
-                and (b) jQuery part of the 'New Feed Selection'
-                test suite.
-            1.  Go back and see how elint is configured for
-                    feedreader.js.
-            2.  Perhaps jQuery $() could also be used to
-                improve the asynchronicity of the 'New Feed Selection'
-                test suite.
-    4.  Try to find the proper location for `jasmine.json`.
-        1.  It is currently in `./jasmine/spec/support`, but it
-            is far from clear that that directory is the proper
-            location.  On the other hand, *see*:
-            1.  ["Node.js Unit Testing Tutorial with
-            Jasmine"](https://www.guru99.com/node-js-testing-jasmine.html)
-            2.  ["Using Jasmine with node" in the "Configuration"
-            section](https://jasmine.github.io/setup/nodejs.html#configuration)
-2.  Once the testing environment is working better, consider:
+        1.      Try initalizing and reconfiguring the testing for Jasmine (see gulp.js)
+```
+node node_modules/jasmine/bin/jasmine init
+"scripts": { "test": "jasmine" }
+```
+2.  Try to find the proper location for `jasmine.json`.
+    1.  It is currently in `./jasmine/spec/support`, but it
+        is far from clear that that directory is the proper
+        location.  On the other hand, *see*:
+        1.  ["Node.js Unit Testing Tutorial with
+        Jasmine"](https://www.guru99.com/node-js-testing-jasmine.html)
+        2.  ["Using Jasmine with node" in the "Configuration"
+        section](https://jasmine.github.io/setup/nodejs.html#configuration)
+3.  Once the testing environment is working better, consider:
     1.  updating the dependencies in index.html, e.g.
         1.  Jasmine
         2.  jQuery
-    2.  expanding the 'New Feed Selection' test suite with nested
-            for loops.  *See*
-                [commit222etc]
-                (https://github.com/jkelley399/frontend-nanodegree-feedreader/commit/222f8c2a518f1fd980f9ff4482073e28b745476d#diff-f678b4a26f35e3dba5f8f6d083a596fc)
-    3.  adding puppeteer to the build sequence
-        1.  Since we will be using gulp-jasmine-browser and will want to run
-tests from the terminal, install puppeteer
-        2.  For refernce, *see* [Section 7, "Unit Testing in Gulp," in Lesson 5,
-    "How to Prevent Disasters," in the Udacity FED-ND Part 6,
-    "JavaScript Tools & Testing,"](https://classroom.udacity.com/nanodegrees/nd001/parts/20f5a632-38e6-48e7-88c8-e14c21590bb9/modules/de442af7-4ae2-48d7-a613-cf132eeaf60c/lessons/5876358842/concepts/53738292280923)
-        3.  Install puppeteer
-            1.  `npm install puppeteer`
+    2.  expanding the 'New Feed Selection' test suite with nested for loops.  *See* [commit222etc](https://github.com/jkelley399/frontend-nanodegree-feedreader/commit/222f8c2a518f1fd980f9ff4482073e28b745476d#diff-f678b4a26f35e3dba5f8f6d083a596fc)
 3.  Although not been currently implemented, it is worth noting that:
-
-    1.  If one wanted to produce a more compact distribution, it would also be
-desirable to install additional gulp dependencies, e.g.,
+    1.  If one wanted to produce a more compact distribution, it would also be desirable to install additional gulp dependencies, e.g.,
 
 ```
 const concat = require('gulp-concat');
@@ -458,8 +463,7 @@ const pngquant = require('imagemin-pngquant');
 
 *See*, generally, Udacity FED-ND Part 6, ["JavaScript Tools & Testing"](https://classroom.udacity.com/nanodegrees/nd001/parts/20f5a632-38e6-48e7-88c8-e14c21590bb9/modules/de442af7-4ae2-48d7-a613-cf132eeaf60c/lessons/5861830171/concepts/53272908270923)
 
-4.  The Jasmine documentation for Node.js recommends some additional commands
-to facilitate running Jasmine tests under npm at the command line.
+4.  The Jasmine documentation for Node.js recommends some additional commands to facilitate running Jasmine tests under npm at the command line.
 
 - Add Jasmine to your package.json
 

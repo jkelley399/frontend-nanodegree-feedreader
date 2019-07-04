@@ -44,6 +44,19 @@ function copyHTML() {
     return gulp.src('./index.html')
         .pipe(gulp.dest('./dist'));
 }
+// 2019-07-04: New function to move icomoon fonts
+function icomoon() {
+    return gulp.src('fonts/**/icomoon.*')
+        .pipe(gulp.dest('dist/fonts'));
+}
+
+// 2019-07-04: New function to change base directory for BrowserSync
+// Based on
+// https://scotch.io/tutorials/how-to-use-browsersync-for-faster-development#toc-using-browsersync
+// Consulted 2019-07-04
+function browserSyncNewBaseDir() {
+    return bs.init({server: {baseDir: './dist'}});
+}
 
 function scripts() {
     return gulp.src('js/**/*.js')
@@ -109,8 +122,8 @@ function watch (done) {
 //     See: sitepoint post in "Automating Your Workflow" section
 exports.tests = tests;
 exports.scripts = scripts;
-exports.dist = gulp.series(copyHTML, css, scriptsDist, watch);
-exports.default = gulp.series(copyHTML, css, lint, tests, scripts, watch);
+exports.dist = gulp.series(copyHTML, css, icomoon, scriptsDist, watch);
+exports.default = gulp.series(copyHTML, css, icomoon, lint, tests, scripts, watch);
 
 // ADDITIONAL REFERENCES CONSULTED
 

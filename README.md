@@ -358,7 +358,7 @@ $ gulp
 
 - The entire page should look like this
 
-![alt text](https://github.com/jkelley399/frontend-nanodegree-feedreader/blob/master/addl_images/markdown/Screen%20Shot%202019-07-01%20at%207.25.48%20PM.png "Screenshot of frontend-nanodegree-feedreader/index.html showing 'Udacity Blog' and output from the Jasmine test suites with headline, `7 specs, 0 failures, randomized with seed 13945' ")
+![alt text](https://github.com/jkelley399/frontend-nanodegree-feedreader/blob/master/addl_images/debugging/Screen%20Shot%202019-07-04%20at%202.37.08%20PM.png "Screenshot of frontend-nanodegree-feedreader/index.html showing 'Linear Digressions' and output from the Jasmine test suites with headline, `7 specs, 0 failures, randomized with seed 09643' ")
 
 #### Not Currently Running on GitHub Pages
 
